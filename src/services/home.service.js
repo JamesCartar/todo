@@ -3,7 +3,7 @@ class HomeService {
 		return {
 			success: true,
 			statusCode: 200,
-			message: "Welcome from todo application api"
+			message: "Welcome from todo application api",
 		};
 	}
 }

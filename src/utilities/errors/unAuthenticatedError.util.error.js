@@ -1,9 +1,10 @@
-const CustomerApiError = require("./customerApiError.util.error");
+const CustomApiError = require("./CustomApiError.util.error");
 
-class UnAuthenticatedError extends CustomerApiError {
-	constructor(message) {
-		super(message);
+class UnAuthenticatedError extends CustomApiError {
+	constructor(message, cause = "Unauthenticated error") {
+		super(message, cause);
 		this.statusCode = 401;
+		this.name = this.constructor.name;
 	}
 }
 

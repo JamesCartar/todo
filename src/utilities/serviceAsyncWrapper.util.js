@@ -1,7 +1,7 @@
 const serviceAsyncWrapper = (serviceFunction) => {
-	return async (req) => {
+	return async (...param) => {
 		try {
-			return await serviceFunction(req);
+			return await serviceFunction(...param);
 		} catch (error) {
 			throw error;
 		}
