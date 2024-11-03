@@ -4,7 +4,7 @@ const { createUserTable } = require("./user.model");
 const initTables = async () => {
 	try {
 		await createUserTable();
-		// await createTodoTable();
+		await createTodoTable();
 	} catch (error) {
 		throw new Error(error);
 	}

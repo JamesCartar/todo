@@ -2,8 +2,9 @@
 require("dotenv").config();
 // }
 const express = require("express");
-const route = require("./src/routes");
+const route = require("./src/routes/index.route");
 const initTables = require("./src/models/index");
+const errorHandler = require("./src/middlewares/errorHandler");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,7 +12,9 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json({}));
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", route);
+app.use("/", route);
+
+app.use(errorHandler);
 
 initTables()
 	.then(() => {

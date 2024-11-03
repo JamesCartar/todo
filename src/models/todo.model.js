@@ -2,7 +2,7 @@ const db = require("../db/db");
 
 const createTodoTable = async () => {
 	const query = `
-		create table if not exists todos (
+		create table if not exists todo.todos (
 			id int primary key auto_increment,
 			user_id int,
 			text varchar(300) not null,

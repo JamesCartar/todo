@@ -1,0 +1,7 @@
+class CustomerApiError extends Error {
+	constructor(message) {
+		super(message);
+	}
+}
+
+module.exports = CustomerApiError;
