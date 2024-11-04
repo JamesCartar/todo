@@ -2,7 +2,7 @@ const db = require("../db/db");
 const serviceAsyncWrapper = require("../utilities/serviceAsyncWrapper.util");
 const { hashPassword } = require("../utilities/password.util");
 const {
-	NotFoundError,
+	NotFoundError
 } = require("../utilities/errors/notFoundError.util.error");
 
 class UserService {
@@ -52,13 +52,13 @@ class UserService {
 			getSql += " where " + formattedCondition;
 			countSql += " where " + formattedCondition;
 		}
-		// querying total row count before adding limit and offset to params
+		// to get the total row count before adding limit and offset to params
 		const [[{ total }]] = await db.query(countSql, params);
 
 		// adding pagination to the query
 		const limit = pagination.entriesPerPage;
 		const offset = pagination.page * limit;
-		getSql += " limit ? offset ?";
+		getSql += " order by created_at desc limit ? offset ?";
 		params.push(limit, offset);
 		const [rows] = await db.query(getSql, params);
 
@@ -66,7 +66,7 @@ class UserService {
 			...pagination,
 			page: pagination.page + 1,
 			totalResult: total,
-			foundResult: rows.length,
+			foundResult: rows.length
 		};
 		return [rows, metaData];
 	}
@@ -95,7 +95,7 @@ class UserService {
 		const result = await db.query(insertQuery, [
 			name,
 			email,
-			hashedPassword,
+			hashedPassword
 		]);
 		if (result && result[0].affectedRows) {
 			const insertedId = result[0].insertId;

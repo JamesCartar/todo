@@ -5,7 +5,7 @@ const createTodoTable = async () => {
 		create table if not exists todo.todos (
 			id int primary key auto_increment,
 			user_id int,
-			text varchar(300) not null,
+			description varchar(300) not null,
 			completed_flag bool default 0,
 
 			foreign key (user_id) references users(id)

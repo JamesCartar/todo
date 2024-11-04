@@ -1,0 +1,8 @@
+Connection host from local to with mysql from docker 
+
+----- in env -----
+host = 127.0.0.1 (or) localhost
+
+----- in mysql -----
+host = 172.17.0.1
+grant = select, update, delete, create, references, alert
