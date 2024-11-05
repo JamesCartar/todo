@@ -19,32 +19,43 @@ class UserService {
 		const conditions = [];
 
 		if (filters.name) {
-			conditions.push("name like ?");
+			conditions.push("u.name like ?");
 			params.push(`%${filters.name}%`);
 		}
 		if (filters.email) {
-			conditions.push("email = ?");
+			conditions.push("u.email = ?");
 			params.push(filters.email);
 		}
 		if (filters.start_date) {
-			conditions.push("created_at >= ?");
+			conditions.push("u.created_at >= ?");
 			params.push(filters.start_date);
 		}
 		if (filters.end_date) {
-			conditions.push("created_at <= ?");
+			conditions.push("u.created_at <= ?");
 			params.push(filters.end_date);
 		}
 
 		let getSql = `
-			select 	id,
-					name,
-					email,
-					created_at
-			from	users
+			select 	u.id,
+					u.name,
+					u.email,
+					u.created_at,
+					json_arrayagg(
+						json_object(
+							'id', t.id,
+							'description', t.description,
+							'completed_flag', t.completed_flag,
+							'created_at', t.created_at
+						)
+					) as todos
+			from	users u
+			left join todos t
+			on		u.id = t.user_id
+			group by u.id
 		`;
 		let countSql = `
 			select 	count(*) as total
-			from	users
+			from	users u
 		`;
 		// Checking if there are any conditions
 		if (conditions.length > 0) {
@@ -73,16 +84,29 @@ class UserService {
 
 	async getUser(id) {
 		const getQuery = `
-			select 	id,
-					name,
-					email,
-					created_at
-			from	users
-			where	id = ?
+			select 	u.id,
+					u.name,
+					u.email,
+					u.created_at,
+					json_arrayagg(
+						json_object(
+							'id', t.id,
+							'description', t.description,
+							'completed_flag', t.completed_flag,
+							'created_at', t.created_at
+						)
+					) as todos
+			from	users u
+			left join todos t
+			on		u.id = t.user_id
+			where	u.id = ?
+			group by u.id
 		`;
+
 		const [[row]] = await db.query(getQuery, [id]);
 		if (!row) throw new NotFoundError("User not found");
 
+		console.log(row.todos);
 		return row;
 	}
 
@@ -156,3 +180,23 @@ class UserService {
 	}
 }
 module.exports = UserService;
+
+// const getQuery = `
+// 	select 	u.id,
+// 			u.name,
+// 			u.email,
+// 			u.created_at,
+// 			GROUP_CONCAT(
+// 				JSON_OBJECT(
+// 					'id', t.id,
+// 					'description', t.description,
+// 					'completed_flag', t.completed_flag,
+// 					'created_at', t.created_at
+// 				)
+// 			) as todos
+// 	from	users u
+// 	left join todos t
+// 	on		u.id = t.user_id
+// 	where	u.id = ?
+// 	group by u.id
+// `;

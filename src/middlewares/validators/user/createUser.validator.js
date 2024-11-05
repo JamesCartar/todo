@@ -3,7 +3,7 @@ const Joi = require("joi");
 const { BadRequestError } = require("../../../utilities/errors");
 
 const createUserSchema = Joi.object({
-	name: Joi.string().trim().min(3).max(30).required(),
+	name: Joi.string().trim().min(3).max(30).lowercase().required(),
 	email: Joi.string().trim().email().required(),
 	password: Joi.string().min(8).max(256).required()
 });

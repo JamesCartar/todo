@@ -1,7 +1,7 @@
 const UserService = require("../services/user.service");
 const controllerAsyncWrapper = require("../utilities/controllerAsyncWrapper.util");
 const {
-	BadRequestError,
+	BadRequestError
 } = require("../utilities/errors/badRequestError.util.error");
 
 class UserController {
@@ -21,7 +21,7 @@ class UserController {
 		return res.status(200).json({
 			success: true,
 			statusCode: 200,
-			data: { users, metaData },
+			data: { users, metaData }
 		});
 	}
 
@@ -37,15 +37,18 @@ class UserController {
 		return res.status(201).json({
 			success: true,
 			statusCode: 201,
-			data: { user },
+			data: { user }
 		});
 	}
 
 	async updateUser(req, res) {
-		const user = await this.userService.updateUser(req.params.id, req.body);
+		const result = await this.userService.updateUser(
+			req.params.id,
+			req.body
+		);
 		return res
 			.status(200)
-			.json({ success: true, statusCode: 200, data: { user } });
+			.json({ success: true, statusCode: 200, message: result });
 	}
 
 	async deleteUser(req, res) {
@@ -53,7 +56,7 @@ class UserController {
 		return res.status(200).json({
 			success: true,
 			statusCode: 200,
-			message,
+			message
 		});
 	}
 }
